@@ -1,0 +1,17 @@
+post_install() {
+    cd /usr/share/piper-voices/
+    models=$(find -type f -name "*.onnx" | sed 's/.\///;s/\..*//')
+    for model in ${models[@]}; do
+        if [ -z "$(grep $model <<< /etc/speech-dispatcher/modules/piper-generic.conf)" ];then
+            echo 'AddVoice ''"'$(awk -F'/' '{print $2}' <<< $model | sed 's/_/-/')'"'' "MALE1"    ''"'$model'"''' | tee -a /etc/speech-dispatcher/modules/piper-generic.conf
+        fi
+    done
+}
+
+post_upgrade() {
+    post_install
+}
+
+post_remove() {
+    post_install
+}

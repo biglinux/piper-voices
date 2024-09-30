@@ -1,42 +1,195 @@
 # Maintainer: Barnabé di Kartola <barnabedikartola@gmail.com>
 
-pkgname=biglinux-package-template
-pkgdesc="Package template for biglinux"
-# depends=('')
-# makedepends=('')
-# conflicts=('')
+pkgname=(
+piper-voices-ar-JO
+piper-voices-ca-ES
+piper-voices-cs-CZ
+piper-voices-cy-GB
+piper-voices-da-DK
+piper-voices-de-DE
+piper-voices-el-GR
+piper-voices-en-GB
+piper-voices-en-US
+piper-voices-es-ES
+piper-voices-es-MX
+piper-voices-fa-IR
+piper-voices-fi-FI
+piper-voices-fr-FR
+piper-voices-hu-HU
+piper-voices-is-IS
+piper-voices-it-IT
+piper-voices-ka-GE
+piper-voices-kk-KZ
+piper-voices-lb-LU
+piper-voices-ne-NP
+piper-voices-nl-BE
+piper-voices-nl-NL
+piper-voices-no-NO
+piper-voices-pl-PL
+piper-voices-pt-BR
+piper-voices-pt-PT
+piper-voices-ro-RO
+piper-voices-ru-RU
+piper-voices-sk-SK
+piper-voices-sl-SI
+piper-voices-sr-RS
+piper-voices-sv-SE
+piper-voices-sw-CD
+piper-voices-tr-TR
+piper-voices-uk-UA
+piper-voices-vi-VN
+piper-voices-zh-CN
+)
 pkgver=$(date +%y.%m.%d)
 pkgrel=$(date +%H%M)
-arch=('any')
-license=('GPL3')
-url="https://github.com/biglinux/$pkgname"
+url="https://huggingface.co/rhasspy/piper-voices"
+license=("MIT")
+arch=("any")
+groups=("piper-voices")
 provides=("$pkgname")
-source=("git+${url}.git")
-md5sums=('SKIP')
-if [ -e "${pkgname}.install" ];then
-    install=${pkgname}.install
-elif [ -e "pkgbuild.install" ];then
-    install=pkgbuild.install
-fi
+conflicts=("piper-voices-minimal")
+depends=("piper-voices-common" "piper-tts")
+makedepends=("git-lfs")
+install=piper-voices.install
 
-package() {
-    # Verify default folder
-    if [ -d "${srcdir}/${pkgname}/${pkgname}" ]; then
-        InternalDir="${srcdir}/${pkgname}/${pkgname}"
-    else
-        InternalDir="${srcdir}/${pkgname}"
-    fi
+prepare(){
+git clone "https://huggingface.co/rhasspy/piper-voices"
+cd piper-voices
 
-    # Copy files
-    if [ -d "${InternalDir}/usr" ]; then
-        cp -r "${InternalDir}/usr" "${pkgdir}/"
-    fi
-
-    if [ -d "${InternalDir}/etc" ]; then
-        cp -r "${InternalDir}/etc" "${pkgdir}/"
-    fi
-
-    if [ -d "${InternalDir}/opt" ]; then
-        cp -r "${InternalDir}/opt" "${pkgdir}/"
-    fi
+rm README.md voices.json
+rm -r _script \
+cy/ \
+de/de_DE/eva_k/ \
+en/en_GB/jenny_dioco/ \
+it/it_IT/riccardo/ \
+en/en_US/lessac/ \
+zh/
+find -type d -name samples -exec rm -r {} +
 }
+
+packager_copy(){
+pkgdesc="Voices for Piper text to speech system $(sed 's/piper-voices-//' <<< $pkgname)"
+
+cd $srcdir/piper-voices
+langs=$(find -type d -iname "$(sed 's/piper-voices-//;s/-/_/g;s/.\///' <<< $pkgname)")
+for lang in ${langs[@]}; do
+    mkdir -p "$pkgdir/usr/share/piper-voices/$lang"
+    cp -r "$lang" "$pkgdir/usr/share/piper-voices/$(awk -F'/' '{print $2}' <<< $lang)"
+done
+}
+
+package_piper-voices-ar-JO(){
+    packager_copy
+}
+package_piper-voices-ca-ES(){
+    packager_copy
+}
+package_piper-voices-cs-CZ(){
+    packager_copy
+}
+package_piper-voices-cy-GB(){
+    packager_copy
+}
+package_piper-voices-da-DK(){
+    packager_copy
+}
+package_piper-voices-de-DE(){
+    packager_copy
+}
+package_piper-voices-el-GR(){
+    packager_copy
+}
+package_piper-voices-en-GB(){
+    packager_copy
+}
+package_piper-voices-en-US(){
+    packager_copy
+}
+package_piper-voices-es-ES(){
+    packager_copy
+}
+package_piper-voices-es-MX(){
+    packager_copy
+}
+package_piper-voices-fa-IR(){
+    packager_copy
+}
+package_piper-voices-fi-FI(){
+    packager_copy
+}
+package_piper-voices-fr-FR(){
+    packager_copy
+}
+package_piper-voices-hu-HU(){
+    packager_copy
+}
+package_piper-voices-is-IS(){
+    packager_copy
+}
+package_piper-voices-it-IT(){
+    packager_copy
+}
+package_piper-voices-ka-GE(){
+    packager_copy
+}
+package_piper-voices-kk-KZ(){
+    packager_copy
+}
+package_piper-voices-lb-LU(){
+    packager_copy
+}
+package_piper-voices-ne-NP(){
+    packager_copy
+}
+package_piper-voices-nl-BE(){
+    packager_copy
+}
+package_piper-voices-nl-NL(){
+    packager_copy
+}
+package_piper-voices-no-NO(){
+    packager_copy
+}
+package_piper-voices-pl-PL(){
+    packager_copy
+}
+package_piper-voices-pt-BR(){
+    packager_copy
+}
+package_piper-voices-pt-PT(){
+    packager_copy
+}
+package_piper-voices-ro-RO(){
+    packager_copy
+}
+package_piper-voices-ru-RU(){
+    packager_copy
+}
+package_piper-voices-sk-SK(){
+    packager_copy
+}
+package_piper-voices-sl-SI(){
+    packager_copy
+}
+package_piper-voices-sr-RS(){
+    packager_copy
+}
+package_piper-voices-sv-SE(){
+    packager_copy
+}
+package_piper-voices-sw-CD(){
+    packager_copy
+}
+package_piper-voices-tr-TR(){
+    packager_copy
+}
+package_piper-voices-uk-UA(){
+    packager_copy
+}
+package_piper-voices-vi-VN(){
+    packager_copy
+}
+package_piper-voices-zh-CN(){
+    packager_copy
+}
+

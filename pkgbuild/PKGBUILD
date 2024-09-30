@@ -53,6 +53,7 @@ makedepends=("git-lfs")
 install=piper-voices.install
 
 prepare(){
+git lfs install
 git clone "https://huggingface.co/rhasspy/piper-voices"
 cd piper-voices
 
